@@ -10,42 +10,12 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2.0.2
-      with:
-        terraform_version: latest
-        cli_config_credentials_token: ${{ secrets.TFC_TOKEN_ID }}
-
-    - name: Terraform Init
-      id: init
-      run: terraform -chdir="./iac" init
-
-    - name: Terraform Validate
-      id: validate
-      run: terraform -chdir="./iac" validate
-
-    - name: Terraform Plan
-      id: plan
-      run: terraform -chdir="./iac" plan
-      continue-on-error: true
-
-    - name: Terraform Plan Status
-      if: steps.plan.outcome == 'failure'
-      run: exit 1
-
-    - name: Terraform Apply
-      run: terraform -chdir="./iac" apply -auto-approve
-
-    - name: Terraform Output
-      run: terraform output
-
+    - uses: actions/checkout@v
     - uses: azure/docker-login@v1
       with:
-        login-server: cloudquickstartregistry.azurecr.io
+        login-server: testimagepaxafe.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - run: |
-        docker build . -t cloudquickstartregistry.azurecr.io/myapp:1.0.0
-        docker push cloudquickstartregistry.azurecr.io/myapp:1.0.0
+        docker build . -t testimagepaxafe.azurecr.io/myapp:1.0.0
+        docker push testimagepaxafe.azurecr.io/myapp:1.0.0
